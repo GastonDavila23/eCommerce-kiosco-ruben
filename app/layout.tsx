@@ -8,7 +8,7 @@ export const metadata = {
   openGraph: {
     title: 'RW-KIOSCO | Menú Digital',
     description: 'Panchos a la masa, promociones y extras de kiosco.',
-    url: 'https://e-commerce-ruben.vercel.app/',
+    url: 'https://rwkiosco.com/',
     siteName: 'RW-KIOSCO',
     images: [
       {
