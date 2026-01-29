@@ -78,7 +78,7 @@ export default function ProductForm() {
       <form
         ref={formRef}
         onSubmit={handleUpload}
-        className={`p-6 md:p-8 rounded-[2.5rem] border transition-all duration-500 shadow-2xl ${editingId ? 'bg-[#111] border-orange-400' : 'bg-[#111] border-white/5'
+        className={`p-6 md:p-8 rounded-[2.5rem] border transition-all duration-500 shadow-2xl ${editingId ? 'bg-[#111] border-orange-400' : 'bg-[#111] border-[#111]'
           }`}
       >
         <input type="hidden" name="currentImageUrl" />

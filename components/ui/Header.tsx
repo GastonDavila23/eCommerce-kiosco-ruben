@@ -11,9 +11,9 @@ export default function Header({ isOpen, categories, filter, setFilter }: Header
   return (
     <header className="sticky top-0 bg-white/90 backdrop-blur-xl z-40 px-6 pt-10 pb-4 border-b border-gray-50">
       <div className="flex justify-between items-center mb-6">
-        {/* Título */}
-        <h1 className="text-4xl font-black italic tracking-tighter leading-none text-black">
-          RW-KISCO
+        {/* Título adaptado al color del logo */}
+        <h1 className="text-4xl font-black italic tracking-tighter leading-none text-(--color-primary-dark)">
+          RW-KIOSCO
         </h1>
         {/* Badge de Estado */}
         <div className={`px-3 py-1 rounded-full flex items-center gap-2 ${isOpen ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'
@@ -37,8 +37,8 @@ export default function Header({ isOpen, categories, filter, setFilter }: Header
         <button
           onClick={() => setFilter(null)}
           className={`px-5 py-2.5 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all border ${!filter
-              ? 'bg-black text-white border-black'
-              : 'bg-gray-50 text-gray-400 border-transparent'
+              ? 'bg-(--color-primary) text-white border-(--color-primary)'
+              : 'bg-(--color-surface) text-gray-400 border-transparent'
             }`}
         >
           Todos
@@ -49,8 +49,8 @@ export default function Header({ isOpen, categories, filter, setFilter }: Header
             key={cat.id}
             onClick={() => setFilter(cat.id)}
             className={`px-5 py-2.5 rounded-2xl text-[10px] font-black uppercase tracking-widest whitespace-nowrap transition-all border ${filter === cat.id
-                ? 'bg-black text-white border-black'
-                : 'bg-gray-50 text-gray-400 border-transparent'
+                ? 'bg-(--color-primary) text-white border-(--color-primary)'
+                : 'bg-(--color-surface) text-gray-400 border-transparent'
               }`}
           >
             {cat.name}

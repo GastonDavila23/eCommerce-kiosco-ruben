@@ -10,7 +10,7 @@ export default function AdminSecreto() {
     <div className="min-h-screen bg-[#0A0A0A] text-white p-6 pb-24 font-sans">
       <div className="max-w-md mx-auto">
         <header className="mb-10 pt-4 text-center">
-          <h1 className="text-4xl font-black italic tracking-tighter">RUBÉN ADMIN 🤫</h1>
+          <h1 className="text-4xl font-black italic tracking-tighter">ADMINISTRAR KIOSCO</h1>
           <p className="text-gray-500 text-[10px] font-black uppercase tracking-[0.4em] mt-2">
             Gestión Integral de la Carta
           </p>

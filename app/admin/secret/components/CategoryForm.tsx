@@ -117,7 +117,7 @@ export default function CategoryForm() {
   };
 
   return (
-    <div className="bg-[#111] p-8 rounded-[2.5rem] border border-white/5">
+    <div className="bg-[#111] p-8 rounded-[2.5rem] border border-[#111]">
       <h3 className="text-blue-400 text-[10px] font-black uppercase tracking-widest mb-6 flex items-center gap-2">
         <LayoutGrid size={14} /> Ordenar Categorías (Arrastrá)
       </h3>

@@ -59,31 +59,6 @@ export default function ProductModal({ product, onClose }: any) {
               </div>
             </div>
 
-            {/* Info rápida */}
-            <div className="flex justify-between border-y border-gray-50 py-5">
-              <div className="flex items-center gap-2 text-[10px] font-black text-gray-400 uppercase tracking-widest">
-                <Clock size={16} className="text-gray-200" /> {product.cooking_time || "15-20 min"}
-              </div>
-              <div className="flex items-center gap-2 text-[10px] font-black text-gray-400 uppercase tracking-widest">
-                <Flame size={16} className="text-gray-200" /> Elaboración Propia
-              </div>
-            </div>
-
-            {/* Ingredientes (si existen) */}
-            {product.ingredients && product.ingredients.length > 0 && (
-              <div>
-                <h4 className="text-[10px] font-black uppercase text-gray-300 tracking-[0.3em] mb-4">Ingredientes Principales</h4>
-                <div className="flex flex-wrap gap-2">
-                  {product.ingredients.map((ing: string, index: number) => (
-                    <div key={index} className="flex items-center gap-1.5 bg-gray-50 px-3 py-2 rounded-2xl border border-gray-100">
-                      <CheckCircle2 size={12} className="text-green-500" />
-                      <span className="text-xs font-bold text-gray-600 lowercase">{ing}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
             {/* Descripción */}
             <div className="space-y-3">
               <h4 className="text-[10px] font-black uppercase text-gray-300 tracking-[0.3em]">Descripción</h4>

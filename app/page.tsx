@@ -27,21 +27,24 @@ export default function MenuPage() {
   }, [data]);
 
   if (isLoading) return (
-    <div className="min-h-screen flex items-center justify-center bg-white">
-      <Loader2 className="animate-spin text-black" size={40} />
+    /* Uso de bg-white mantenido como fondo neutro base */
+    <div className="min-h-screen flex items-center justify-center bg-(--color-background)">
+      {/* El spinner ahora usa el color primario (Azul) */}
+      <Loader2 className="animate-spin text-(--color-primary)" size={40} />
     </div>
   );
 
   if (isError) return (
-    <div className="p-10 text-center font-bold text-red-500">
+    <div className="p-10 text-center font-bold text-(--color-accent)">
       Error al conectar con la base de datos.
     </div>
   );
 
-  const { categories, products, combos } = data!;
+  const { categories, products, combos } = data! ;
 
   return (
-    <div className="min-h-screen bg-white text-black font-sans pb-48">
+    /* Fondo principal usando nuestra variable de background */
+    <div className="min-h-screen bg-(--color-background) text-(--color-primary-dark) font-sans pb-48">
       <Header isOpen={isOpen} categories={categories} filter={filter} setFilter={setFilter} />
       <ComboSlider combos={combos} filter={filter} isOpen={isOpen} />
 
@@ -56,9 +59,15 @@ export default function MenuPage() {
         />
       </main>
 
-      <FloatingCart isOpenBusiness={isOpen} />
       <Navbar />
-      <ProductModal product={selectedProduct} onClose={() => setSelectedProduct(null)} />
+      <FloatingCart isOpenBusiness={isOpen} />
+
+      {selectedProduct && (
+        <ProductModal 
+          product={selectedProduct} 
+          onClose={() => setSelectedProduct(null)} 
+        />
+      )}
     </div>
   );
 }

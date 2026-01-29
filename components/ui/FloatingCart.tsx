@@ -19,131 +19,161 @@ export default function FloatingCart({ isOpenBusiness }: FloatingCartProps) {
   const sendWhatsApp = () => {
     if (!isOpenBusiness) return;
     const phone = "5492634325471";
-    const items = cart.map((i: any) => `• ${i.qty}x ${i.name}`).join('\n');
-    let msg = `¡Hola Rubén! 👋 Mi pedido:\n\n${items}\n\n`;
-    msg += `--- \n`;
-    msg += `📍 *Entrega:* ${deliveryMethod === 'delivery' ? 'Delivery' : 'Local'}\n`;
-    msg += `💳 *Pago:* ${paymentMethod === 'efectivo' ? 'Efectivo' : 'Transferencia'}\n`;
+    const items = cart.map((i: any) => `• ${i.qty}x ${i.name}`).join('\\n');
+    let msg = `¡Hola Rubén! 👋 Mi pedido:\\n\\n${items}\\n\\n`;
+    msg += `--- \\n`;
+    msg += `📍 *Entrega:* ${deliveryMethod === 'delivery' ? 'Delivery' : 'Local'}\\n`;
+    msg += `💳 *Pago:* ${paymentMethod === 'efectivo' ? 'Efectivo' : 'Transferencia'}\\n`;
     
     if (kioscoExtra.trim()) {
-      msg += `🍬 *Extra Kiosco:* ${kioscoExtra}\n`;
-      msg += `_(Por favor, confírmame el precio de los extras)_\n`;
+      msg += `✨ *Extras Kiosco:* ${kioscoExtra}\\n`;
     }
     
-    msg += `\n*Total Comida: $${total}*\n`;
-    msg += `--- \n¿Me confirmás el pedido?`;
+    msg += `--- \\n`;
+    msg += `💰 *Subtotal:* $${total}\\n`;
+    msg += `\\n¡Quedo atento a la confirmación!`;
+
     window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
   };
 
+  if (totalItems === 0) return null;
+
   return (
     <>
-      <button 
+      {/* Botón Flotante */}
+      <motion.button
+        initial={{ scale: 0, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        whileTap={{ scale: 0.9 }}
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-24 right-6 z-50 bg-black text-white p-4 rounded-full shadow-2xl active:scale-90 transition-transform"
+        className="fixed bottom-32 right-6 z-[60] bg-(--color-accent) text-white p-5 rounded-full shadow-2xl flex items-center gap-3"
       >
-        <ShoppingCart size={24} />
-        {totalItems > 0 && (
-          <span className="absolute -top-1 -right-1 bg-red-500 text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center border-2 border-white">
+        <div className="relative">
+          <ShoppingCart size={24} />
+          <span className="absolute -top-2 -right-2 bg-white text-(--color-accent) text-[10px] font-black h-5 w-5 rounded-full flex items-center justify-center border-2 border-(--color-accent)">
             {totalItems}
           </span>
-        )}
-      </button>
+        </div>
+      </motion.button>
 
       <AnimatePresence>
         {isOpen && (
           <motion.div 
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm flex items-end justify-center"
+            className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-md flex items-end justify-center p-4"
           >
             <motion.div 
               initial={{ y: '100%' }} animate={{ y: 0 }} exit={{ y: '100%' }}
-              className="bg-white w-full max-w-md rounded-t-[3rem] p-6 pb-10 max-h-[92vh] flex flex-col shadow-2xl overflow-y-auto no-scrollbar"
+              className="bg-(--color-background) w-full max-w-md rounded-[3rem] overflow-hidden flex flex-col max-h-[90vh] shadow-2xl"
             >
-              {/* Header del Carrito */}
-              <div className="flex justify-between items-center mb-6">
-                <h2 className="text-xl font-black italic tracking-tighter uppercase">Tu Pedido</h2>
-                <button onClick={() => setIsOpen(false)} className="bg-gray-100 p-2 rounded-full"><X size={18} /></button>
+              {/* Header */}
+              <div className="p-8 bg-(--color-primary-dark) text-white flex justify-between items-center">
+                <div>
+                  <h2 className="text-2xl font-black italic uppercase tracking-tighter">Tu Pedido</h2>
+                  <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50">Revisá tu selección</p>
+                </div>
+                <button onClick={() => setIsOpen(false)} className="bg-white/10 p-2 rounded-full hover:bg-white/20 transition-colors">
+                  <X size={20} />
+                </button>
               </div>
 
-              {/* Lista de Productos */}
-              <div className="space-y-3 mb-6">
-                {cart.length === 0 ? (
-                  <p className="text-center text-gray-400 py-10 font-bold uppercase text-[9px] tracking-widest">Vacío</p>
-                ) : (
-                  cart.map((item: any) => (
-                    <div key={item.id} className="flex justify-between items-center border-b border-gray-50 pb-3">
-                      <div className="flex flex-col">
-                        <span className="font-black uppercase text-xs italic">{item.name}</span>
-                        <span className="text-gray-400 font-bold text-[10px]">${item.price * item.qty}</span>
-                      </div>
-                      <div className="flex items-center bg-gray-50 rounded-full scale-90">
-                        <button onClick={() => removeFromCart(item.id)} className="p-1.5 text-black"><Minus size={12} /></button>
-                        <span className="w-6 text-center font-black text-xs italic">{item.qty}</span>
-                        <button onClick={() => addToCart(item)} className="p-1.5 text-black"><Plus size={12} /></button>
-                      </div>
+              {/* Items */}
+              <div className="flex-1 overflow-y-auto p-8 space-y-6 no-scrollbar">
+                {cart.map((item: any) => (
+                  <div key={item.id} className="flex justify-between items-center group">
+                    <div className="space-y-1">
+                      <h4 className="font-black italic uppercase text-(--color-primary-dark) tracking-tight group-hover:text-(--color-accent) transition-colors">{item.name}</h4>
+                      <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">${item.price} c/u</p>
                     </div>
-                  ))
-                )}
+                    <div className="flex items-center gap-4 bg-(--color-surface) p-1.5 rounded-2xl border border-gray-100">
+                      <button onClick={() => removeFromCart(item.id)} className="p-1 hover:text-(--color-accent) transition-colors"><Minus size={14} /></button>
+                      <span className="font-black text-xs w-4 text-center">{item.qty}</span>
+                      <button onClick={() => addToCart(item)} className="p-1 hover:text-(--color-accent) transition-colors"><Plus size={14} /></button>
+                    </div>
+                  </div>
+                ))}
+
+                {/* Extras Kiosco */}
+                <div className="pt-4 border-t border-gray-100">
+                  <div className="flex items-center gap-2 mb-3">
+                    <Candy size={14} className="text-(--color-accent)" />
+                    <h4 className="text-[10px] font-black uppercase text-gray-400 tracking-widest">¿Querés algo más del kiosco?</h4>
+                  </div>
+                  <textarea
+                    value={kioscoExtra}
+                    onChange={(e) => setKioscoExtra(e.target.value)}
+                    placeholder="Ej: un alfajor, chicles, cigarrillos..."
+                    className="w-full bg-(--color-surface) border border-gray-100 rounded-2xl p-4 text-xs font-bold italic focus:ring-2 focus:ring-(--color-accent) outline-none resize-none"
+                    rows={2}
+                  />
+                </div>
+
+                {/* Métodos de Entrega */}
+                <div className="space-y-4 pt-4 border-t border-gray-100">
+                  <h4 className="text-[10px] font-black uppercase text-gray-300 tracking-[0.2em]">Método de Entrega</h4>
+                  <div className="grid grid-cols-2 gap-3">
+                    <button 
+                      onClick={() => setDeliveryMethod('delivery')}
+                      className={`p-4 rounded-2xl border-2 flex flex-col items-center gap-2 transition-all ${
+                        deliveryMethod === 'delivery' ? 'border-(--color-primary) bg-(--color-primary)/5 text-(--color-primary)' : 'border-gray-50 text-gray-400'
+                      }`}
+                    >
+                      <Truck size={20} />
+                      <span className="text-[9px] font-black uppercase">Delivery</span>
+                    </button>
+                    <button 
+                      onClick={() => setDeliveryMethod('retiro')}
+                      className={`p-4 rounded-2xl border-2 flex flex-col items-center gap-2 transition-all ${
+                        deliveryMethod === 'retiro' ? 'border-(--color-primary) bg-(--color-primary)/5 text-(--color-primary)' : 'border-gray-50 text-gray-400'
+                      }`}
+                    >
+                      <Store size={20} />
+                      <span className="text-[9px] font-black uppercase">Retiro Local</span>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Métodos de Pago */}
+                <div className="space-y-4 pt-4 border-t border-gray-100">
+                  <h4 className="text-[10px] font-black uppercase text-gray-300 tracking-[0.2em]">Medio de Pago</h4>
+                  <div className="grid grid-cols-2 gap-3">
+                    <button 
+                      onClick={() => setPaymentMethod('efectivo')}
+                      className={`p-4 rounded-2xl border-2 flex flex-col items-center gap-2 transition-all ${
+                        paymentMethod === 'efectivo' ? 'border-(--color-accent) bg-(--color-accent)/5 text-(--color-accent)' : 'border-gray-50 text-gray-400'
+                      }`}
+                    >
+                      <Banknote size={20} />
+                      <span className="text-[9px] font-black uppercase">Efectivo</span>
+                    </button>
+                    <button 
+                      onClick={() => setPaymentMethod('transferencia')}
+                      className={`p-4 rounded-2xl border-2 flex flex-col items-center gap-2 transition-all ${
+                        paymentMethod === 'transferencia' ? 'border-(--color-accent) bg-(--color-accent)/5 text-(--color-accent)' : 'border-gray-50 text-gray-400'
+                      }`}
+                    >
+                      <CreditCard size={20} />
+                      <span className="text-[9px] font-black uppercase">Transferencia</span>
+                    </button>
+                  </div>
+                </div>
               </div>
 
-              {cart.length > 0 && (
-                <div className="space-y-5">
-                  {/* Selectores de Entrega y Pago */}
-                  <div className="flex gap-4">
-                    <div className="flex-1">
-                      <p className="text-[8px] font-black uppercase text-gray-400 tracking-widest mb-2">Entrega</p>
-                      <div className="bg-gray-100 p-1 rounded-xl flex gap-1">
-                        <button onClick={() => setDeliveryMethod('delivery')} className={`flex-1 py-1.5 rounded-lg flex items-center justify-center gap-1.5 transition-all ${deliveryMethod === 'delivery' ? 'bg-white shadow-sm text-black' : 'text-gray-400'}`}>
-                          <Truck size={12} /> <span className="text-[9px] font-black uppercase italic">Envío</span>
-                        </button>
-                        <button onClick={() => setDeliveryMethod('retiro')} className={`flex-1 py-1.5 rounded-lg flex items-center justify-center gap-1.5 transition-all ${deliveryMethod === 'retiro' ? 'bg-white shadow-sm text-black' : 'text-gray-400'}`}>
-                          <Store size={12} /> <span className="text-[9px] font-black uppercase italic">Retiro</span>
-                        </button>
+              {/* Footer */}
+              {!cart.length ? null : (
+                <div className="p-8 bg-white border-t border-gray-100 space-y-6">
+                  <div className="flex flex-col gap-4">
+                    <div className="flex justify-between items-end">
+                      <div className="space-y-1">
+                        <span className="text-[10px] font-black uppercase text-gray-400 tracking-widest">Total Estimado</span>
+                        <div className="text-4xl font-black italic text-(--color-primary-dark) tracking-tighter leading-none">${total}</div>
                       </div>
-                    </div>
-
-                    <div className="flex-1">
-                      <p className="text-[8px] font-black uppercase text-gray-400 tracking-widest mb-2">Pago</p>
-                      <div className="bg-gray-100 p-1 rounded-xl flex gap-1">
-                        <button onClick={() => setPaymentMethod('efectivo')} className={`flex-1 py-1.5 rounded-lg flex items-center justify-center gap-1.5 transition-all ${paymentMethod === 'efectivo' ? 'bg-white shadow-sm text-black' : 'text-gray-400'}`}>
-                          <Banknote size={12} /> <span className="text-[9px] font-black uppercase italic">Efectivo</span>
-                        </button>
-                        <button onClick={() => setPaymentMethod('transferencia')} className={`flex-1 py-1.5 rounded-lg flex items-center justify-center gap-1.5 transition-all ${paymentMethod === 'transferencia' ? 'bg-white shadow-sm text-black' : 'text-gray-400'}`}>
-                          <CreditCard size={12} /> <span className="text-[9px] font-black uppercase italic">Transf.</span>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Campo de Texto Kiosco */}
-                  <div className="bg-gray-50 p-3 rounded-2xl flex items-start gap-3 border border-gray-100">
-                    <Candy size={14} className="text-pink-500 mt-1 shrink-0" />
-                    <textarea 
-                      placeholder="¿Algo más del kiosco? (Cigarrillos, snacks...)"
-                      value={kioscoExtra}
-                      onChange={(e) => setKioscoExtra(e.target.value)}
-                      className="w-full bg-transparent text-[11px] font-bold outline-none resize-none h-10 placeholder:text-gray-300"
-                    />
-                  </div>
-                  {/* Resumen y Botón de Confirmar */}
-                  <div className="pt-2">
-                    <div className="flex flex-col gap-1 mb-4">
-                      <div className="flex justify-between items-baseline">
-                        <span className="text-[9px] font-black uppercase text-gray-300 tracking-[0.2em]">Subtotal Comida</span>
-                        <span className="text-3xl font-black italic tracking-tighter leading-none">${total}</span>
-                      </div>
-                      
-                      {/* Aviso dinámico si hay extras */}
                       {kioscoExtra.trim() && (
-                        <motion.div 
-                          initial={{ opacity: 0, x: -10 }} 
-                          animate={{ opacity: 1, x: 0 }}
-                          className="flex justify-between items-center"
-                        >
-                          <span className="text-[9px] font-black uppercase text-pink-500 tracking-[0.1em] flex items-center gap-1">
+                        <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="text-right">
+                          <span className="text-[9px] font-black uppercase text-(--color-accent) tracking-[0.1em] flex items-center gap-1">
                             <Candy size={10} /> + Extras Kiosco
                           </span>
-                          <span className="text-[9px] font-bold text-pink-400 italic">Pendiente cotizar</span>
+                          <span className="text-[9px] font-bold text-orange-400 italic">Pendiente cotizar</span>
                         </motion.div>
                       )}
                     </div>
